@@ -224,7 +224,14 @@ fun! vimball#Vimball(really,...)
   else
    let home= vimball#VimballHome()
   endif
-"  call Decho("home<".home.">")
+  let home=home.'/bundle/'.vimballfile
+  if !isdirectory(home)
+      if exists("g:vimball_mkdir")
+          call system(g:vimball_mkdir." ".shellescape(home))
+      else
+          call mkdir(home)
+      endif
+  endif
 
   " save current directory and remove older same-named vimball, if any
   let curdir = getcwd()
@@ -412,6 +419,7 @@ fun! vimball#RmVimball(...)
   else
    let home= vimball#VimballHome()
   endif
+  let home=home.'/bundle/'.curfile.'.vba'
   let curdir = getcwd()
 "  call Decho("home   <".home.">")
 "  call Decho("curfile<".curfile.">")
